@@ -17,6 +17,8 @@ type LiffContextType = {
   login: (redirectUri?: string) => void;
   profile: Profile | null;
   isLoggedIn: boolean;
+  isInClient: boolean;
+  sendMessage: () => void;
   setMockProfile: (profile: Partial<Profile>) => void;
 };
 
@@ -27,6 +29,8 @@ const LiffContext = createContext<LiffContextType>({
   login: () => {},
   profile: null,
   isLoggedIn: false,
+  isInClient: false,
+  sendMessage: () => {},
   setMockProfile: () => {},
 });
 
@@ -38,6 +42,27 @@ export function LiffProvider({ children }: { children: ReactNode }) {
   const [isReady, setIsReady] = useState<boolean>(false);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isInClient, setIsInClient] = useState<boolean>(false);
+
+  // メッセージ送信関数
+  const sendMessage = () => {
+    if (!liffObject || !isInClient) return;
+
+    try {
+      liffObject.sendMessages([
+        {
+          type: 'text',
+          text: 'LIFF アプリからメッセージを送信しました！'
+        }
+      ]).then(() => {
+        console.log('メッセージ送信成功');
+      }).catch((err) => {
+        console.error('メッセージ送信エラー:', err);
+      });
+    } catch (err) {
+      console.error('メッセージ送信エラー:', err);
+    }
+  };
 
   const setMockProfile = (mockProfile: Partial<Profile>) => {
     if (liffObject && import.meta.env.DEV) {
@@ -92,6 +117,9 @@ export function LiffProvider({ children }: { children: ReactNode }) {
 
         console.log('LIFF初期化完了:', liff);
         setLiffObject(liff);
+        
+        // クライアント環境の判定
+        setIsInClient(liff.isInClient());
 
         // 開発環境でモック使用時の処理
         if (useMock) {
@@ -124,6 +152,9 @@ export function LiffProvider({ children }: { children: ReactNode }) {
 
           const loggedIn = liff.isLoggedIn();
           setIsLoggedIn(loggedIn);
+          
+          // クライアント環境の判定
+          setIsInClient(liff.isInClient());
 
           // 本番環境でログインしていない場合は自動ログインを実行
           if (!loggedIn) {
@@ -163,6 +194,8 @@ export function LiffProvider({ children }: { children: ReactNode }) {
     login,
     profile,
     isLoggedIn,
+    isInClient,
+    sendMessage,
     setMockProfile,
   };
 

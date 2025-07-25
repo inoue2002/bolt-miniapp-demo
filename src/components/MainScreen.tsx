@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { QrCode, MessageCircle, Settings, TestTube } from 'lucide-react';
+import { QrCode, MessageCircle, CreditCard } from 'lucide-react';
 import { useLiff } from '../contexts/LiffContext';
 import { QRReader } from './QRReader';
+import { MemberCard } from './MemberCard';
 
 export function MainScreen() {
   const { isLoggedIn, isInClient, sendMessage } = useLiff();
   const [showQRReader, setShowQRReader] = useState(false);
+  const [showMemberCard, setShowMemberCard] = useState(false);
   const [qrResult, setQrResult] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
 
@@ -70,10 +72,13 @@ export function MainScreen() {
             </button>
           )}
 
-          {/* 設定（サンプル） */}
-          <button className="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200">
-            <Settings size={20} />
-            <span className="font-medium">設定（サンプル）</span>
+          {/* 会員証表示 */}
+          <button
+            onClick={() => setShowMemberCard(true)}
+            className="w-full flex items-center gap-3 px-4 py-3 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-200"
+          >
+            <CreditCard size={20} />
+            <span className="font-medium">デジタル会員証</span>
           </button>
         </div>
       </div>
@@ -84,6 +89,11 @@ export function MainScreen() {
           onClose={() => setShowQRReader(false)}
           onResult={handleQRResult}
         />
+      )}
+
+      {/* 会員証モーダル */}
+      {showMemberCard && (
+        <MemberCard onClose={() => setShowMemberCard(false)} />
       )}
     </div>
   );

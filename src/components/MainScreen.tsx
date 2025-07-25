@@ -112,6 +112,21 @@ export function MainScreen() {
             )}
           </button>
 
+          {/* メッセージ送信（常に表示） */}
+          <button
+            onClick={handleSendMessage}
+            disabled={!isInClient}
+            className="w-full flex items-center gap-3 px-4 py-3 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Send size={20} />
+            <span className="font-medium">メッセージ送信</span>
+            {!isInClient && (
+              <span className="ml-auto text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded">
+                LINE内のみ
+              </span>
+            )}
+          </button>
+
           {/* メッセージ送信 */}
           {isInClient && (
             <button

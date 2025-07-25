@@ -66,9 +66,9 @@ export function MemberCard({ onClose }: MemberCardProps) {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl p-6 w-full max-w-sm">
+      <div className="bg-white rounded-2xl p-4 w-full max-w-xs">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-semibold text-gray-800">デジタル会員証</h3>
+          <h3 className="text-lg font-semibold text-gray-800">デジタル会員証</h3>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -78,31 +78,31 @@ export function MemberCard({ onClose }: MemberCardProps) {
         </div>
 
         {/* 会員証カード */}
-        <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl p-6 text-white mb-6 shadow-lg">
-          <div className="flex items-center gap-4 mb-4">
+        <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl p-4 text-white mb-4 shadow-lg">
+          <div className="flex items-center gap-3 mb-3">
             <img
               src={profile.pictureUrl || '/user-icon.svg'}
               alt="プロフィール画像"
-              className="w-16 h-16 rounded-full border-2 border-white/20 object-cover"
+              className="w-12 h-12 rounded-full border-2 border-white/20 object-cover"
             />
             <div className="flex-1">
-              <h4 className="text-lg font-semibold">{profile.displayName}</h4>
-              <p className="text-blue-100 text-sm">会員</p>
+              <h4 className="text-base font-semibold">{profile.displayName}</h4>
+              <p className="text-blue-100 text-xs">会員</p>
             </div>
           </div>
 
-          <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
-            <div className="text-center space-y-3">
+          <div className="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
+            <div className="text-center space-y-2">
               <div>
                 <p className="text-xs text-blue-100 mb-1">ユーザーID</p>
-                <p className="font-mono text-sm break-all">{profile.userId}</p>
+                <p className="font-mono text-xs break-all">{profile.userId}</p>
               </div>
               <div className="flex justify-center">
-                <div className="bg-white rounded-lg p-2">
+                <div className="bg-white rounded-lg p-1">
                   <canvas
                     ref={canvasRef}
                     className="block"
-                    style={{ width: '80px', height: '80px' }}
+                    style={{ width: '60px', height: '60px' }}
                   />
                 </div>
               </div>

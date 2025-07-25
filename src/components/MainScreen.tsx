@@ -127,28 +127,6 @@ export function MainScreen() {
             )}
           </button>
 
-          {/* メッセージ送信 */}
-          {isInClient && (
-            <button
-              onClick={handleSendMessage}
-              className="w-full flex items-center gap-3 px-4 py-3 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200"
-            >
-              <Send size={20} />
-              <span className="font-medium">メッセージ送信</span>
-            </button>
-          )}
-
-          {/* シェアターゲットピッカー */}
-          {isInClient && (
-            <button
-              onClick={handleShareTargetPicker}
-              className="w-full flex items-center gap-3 px-4 py-3 bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200"
-            >
-              <Share size={20} />
-              <span className="font-medium">シェアターゲットピッカー</span>
-            </button>
-          )}
-
           {/* 会員証表示 */}
           <button
             onClick={() => setShowMemberCard(true)}
@@ -158,6 +136,35 @@ export function MainScreen() {
             <span className="font-medium">デジタル会員証</span>
           </button>
         </div>
+          {/* メッセージ送信 */}
+          <button
+            onClick={handleSendMessage}
+            disabled={!isInClient}
+            className="w-full flex items-center gap-3 px-4 py-3 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <MessageCircle size={20} />
+            <span className="font-medium">メッセージ送信</span>
+            {!isInClient && (
+              <span className="ml-auto text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded">
+                LINE内のみ
+              </span>
+            )}
+          </button>
+
+          {/* シェアターゲットピッカー */}
+          <button
+            onClick={handleShareTargetPicker}
+            disabled={!isInClient}
+            className="w-full flex items-center gap-3 px-4 py-3 bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Share size={20} />
+            <span className="font-medium">シェアターゲットピッカー</span>
+            {!isInClient && (
+              <span className="ml-auto text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded">
+                LINE内のみ
+              </span>
+            )}
+          </button>
       </div>
 
       {/* QRリーダーモーダル */}

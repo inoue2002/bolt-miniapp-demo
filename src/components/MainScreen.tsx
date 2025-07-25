@@ -1,15 +1,66 @@
 import { useState } from 'react';
-import { QrCode, MessageCircle, CreditCard } from 'lucide-react';
+import { QrCode, MessageCircle, CreditCard, Send, Share } from 'lucide-react';
 import { useLiff } from '../contexts/LiffContext';
 import { QRReader } from './QRReader';
 import { MemberCard } from './MemberCard';
 
 export function MainScreen() {
-  const { isLoggedIn, isInClient, sendMessage } = useLiff();
+  const { isLoggedIn, isInClient, sendMessage, liff } = useLiff();
   const [showQRReader, setShowQRReader] = useState(false);
   const [showMemberCard, setShowMemberCard] = useState(false);
   const [qrResult, setQrResult] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
+
+  const handleSendMessage = () => {
+    if (!liff || !isInClient) return;
+
+    try {
+      liff.sendMessages([
+        {
+          type: 'text',
+          text: 'LIFF アプリからメッセージを送信しました！🚀\n\n現在時刻: ' + new Date().toLocaleString('ja-JP')
+        }
+      ]).then(() => {
+        console.log('メッセージ送信成功');
+        setQrResult('メッセージを送信しました！');
+        setShowResult(true);
+        setTimeout(() => setShowResult(false), 3000);
+      }).catch((err) => {
+        console.error('メッセージ送信エラー:', err);
+        setQrResult('メッセージ送信に失敗しました');
+        setShowResult(true);
+        setTimeout(() => setShowResult(false), 3000);
+      });
+    } catch (err) {
+      console.error('メッセージ送信エラー:', err);
+    }
+  };
+
+  const handleShareTargetPicker = async () => {
+    if (!liff || !isInClient) return;
+
+    try {
+      await liff.shareTargetPicker([
+        {
+          type: 'text',
+          text: 'LIFF アプリのシェア機能をテスト中です！📱\n\n送信時刻: ' + new Date().toLocaleString('ja-JP')
+        },
+        {
+          type: 'sticker',
+          packageId: '446',
+          stickerId: '1988'
+        }
+      ]);
+      setQrResult('シェアターゲットピッカーを開きました');
+      setShowResult(true);
+      setTimeout(() => setShowResult(false), 3000);
+    } catch (error) {
+      console.error('シェアエラー:', error);
+      setQrResult('シェア機能の実行に失敗しました');
+      setShowResult(true);
+      setTimeout(() => setShowResult(false), 3000);
+    }
+  };
 
   const handleQRResult = (result: string) => {
     setQrResult(result);
@@ -64,11 +115,22 @@ export function MainScreen() {
           {/* メッセージ送信 */}
           {isInClient && (
             <button
-              onClick={sendMessage}
+              onClick={handleSendMessage}
               className="w-full flex items-center gap-3 px-4 py-3 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200"
             >
-              <MessageCircle size={20} />
+              <Send size={20} />
               <span className="font-medium">メッセージ送信</span>
+            </button>
+          )}
+
+          {/* シェアターゲットピッカー */}
+          {isInClient && (
+            <button
+              onClick={handleShareTargetPicker}
+              className="w-full flex items-center gap-3 px-4 py-3 bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200"
+            >
+              <Share size={20} />
+              <span className="font-medium">シェアターゲットピッカー</span>
             </button>
           )}
 
